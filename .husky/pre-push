@@ -1,0 +1,17 @@
+echo ""
+echo "🔐 Security check antes do push"
+echo "--------------------------------"
+
+if npm run lint:secrets; then
+  echo ""
+  echo "✅ Segurança OK. Nenhum segredo encontrado."
+  echo ""
+else
+  echo ""
+  echo "⛔ Push cancelado para proteger o repositório."
+  echo "Motivo: o Secretlint encontrou possível dado sensível."
+  echo "Revise os arquivos listados acima e remova as credenciais antes de enviar."
+  echo "Se for falso positivo, ajuste o .secretlintrc.json."
+  echo ""
+  exit 1
+fi
