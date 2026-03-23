@@ -1,10 +1,9 @@
 import database from "infra/database";
-import { cleanDatabase } from "tests/utils/cleanDatabase.js";
 import orchestrator from "infra/scripts/orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
-  await cleanDatabase();
+  await orchestrator.cleanDatabase();
 });
 
 describe("POST /api/v1/migrations", () => {
