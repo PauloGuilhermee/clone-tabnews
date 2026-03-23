@@ -6,11 +6,15 @@ beforeAll(async () => {
   await cleanDatabase();
 });
 
-test("GET to /api/v1/migrations should return 200", async () => {
-  const respose = await fetch("http://localhost:3000/api/v1/migrations");
-  expect(respose.status).toBe(200);
+describe("GET /api/v1/migrations", () => {
+  describe("Anonymous User", () => {
+    test("Retrieving pending migrations", async () => {
+      const respose = await fetch("http://localhost:3000/api/v1/migrations");
+      expect(respose.status).toBe(200);
 
-  const responseBody = await respose.json();
-  expect(Array.isArray(responseBody)).toBe(true);
-  expect(responseBody.length).toBeGreaterThan(0);
+      const responseBody = await respose.json();
+      expect(Array.isArray(responseBody)).toBe(true);
+      expect(responseBody.length).toBeGreaterThan(0);
+    });
+  });
 });
