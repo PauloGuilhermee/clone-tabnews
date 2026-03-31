@@ -12,7 +12,6 @@ export default function StatusPage() {
 
 function Database() {
   const { data } = useStatus();
-
   const databaseVersion = data?.dependencies?.database?.version ?? "Carregando...";
   const maxConnections = data?.dependencies?.database?.max_connections ?? "Carregando...";
   const openedConnections = data?.dependencies?.database?.opened_connections ?? "Carregando...";
@@ -29,13 +28,10 @@ function Database() {
 
 function UpdatedAt() {
   const { isLoading, data } = useStatus();
-
   let updatedAtText = "Carregando...";
-
   if (!isLoading && data) {
     updatedAtText = new Date(data.updated_at).toLocaleString("pt-BR");
   }
-
   return (
     <div>
       <div>Última atualização: {updatedAtText}</div>
