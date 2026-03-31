@@ -7,7 +7,6 @@ export class InternalServerError extends Error {
     this.action = "Entre em contato com o suporte.";
     this.statusCode = statusCode || 500;
   }
-
   toJSON() {
     return {
       name: this.name,
@@ -41,7 +40,7 @@ export class ServicesError extends Error {
     super(message || "Serviço indisponível no momento", {
       cause,
     });
-    this.name = "InternalServerError";
+    this.name = "ServicesError";
     this.action = "Verifique se o serviço esta disponível";
     this.statusCode = 503;
   }
