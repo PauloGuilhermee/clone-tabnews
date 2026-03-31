@@ -1,12 +1,16 @@
 import { InternalServerError, MethodNotAllowedError } from "infra/errors";
 
 function onErrorHandler(error, request, response) {
-  const publicErrorObject = new InternalServerError({
-    statusCode: error.statusCode,
+  console.log("\nErro capturado pelo onErrorHandler:");
+  console.log(error);
+
+  if (error.statusCode) {
+    return response.status(error.statusCode).json(error);
+  }
+  const internalError = new InternalServerError({
     cause: error,
   });
-  console.log(publicErrorObject);
-  response.status(publicErrorObject.statusCode).json(publicErrorObject);
+  return response.status(internalError.statusCode).json(internalError);
 }
 
 function onNoMatchHandler(request, response) {
