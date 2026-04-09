@@ -1,10 +1,10 @@
-import { InternalServerError, MethodNotAllowedError, ValidationError } from "infra/errors";
+import { InternalServerError, MethodNotAllowedError, NotFoundError, ValidationError } from "infra/errors";
 
 function onErrorHandler(error, request, response) {
   console.log("\nErro capturado pelo onErrorHandler:");
   console.log(error);
 
-  if (error instanceof ValidationError) {
+  if (error instanceof ValidationError || error instanceof NotFoundError) {
     return response.status(error.statusCode).json(error);
   }
 
