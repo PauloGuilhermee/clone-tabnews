@@ -1,16 +1,22 @@
-import { InternalServerError, MethodNotAllowedError } from "infra/errors";
+import { InternalServerError, MethodNotAllowedError, NotFoundError, ValidationError } from "infra/errors";
 
 function onErrorHandler(error, request, response) {
   console.log("\nErro capturado pelo onErrorHandler:");
   console.log(error);
 
+  if (error instanceof ValidationError || error instanceof NotFoundError) {
+    return response.status(error.statusCode).json(error);
+  }
+
   if (error.statusCode) {
     return response.status(error.statusCode).json(error);
   }
-  const internalError = new InternalServerError({
+
+  const publicErrorObject = new InternalServerError({
+    statusCode: error.statusCode,
     cause: error,
   });
-  return response.status(internalError.statusCode).json(internalError);
+  return response.status(publicErrorObject.statusCode).json(publicErrorObject);
 }
 
 function onNoMatchHandler(request, response) {
