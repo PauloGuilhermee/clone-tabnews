@@ -11,6 +11,7 @@ beforeAll(async () => {
 
 describe("POST /api/v1/users", () => {
   describe("Anonymous User", () => {
+    // Verifica cadastro com dados válidos e únicos
     test("With unique and valid data", async () => {
       const response = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
@@ -47,8 +48,7 @@ describe("POST /api/v1/users", () => {
       expect(incorrectPasswordMatch).toBe(false);
     });
 
-    //------------------------------ teste Email duplicado --------------------------------//
-
+    // Verifica erro ao cadastrar email já existente
     test("With duplicated 'email'", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
@@ -88,8 +88,7 @@ describe("POST /api/v1/users", () => {
       });
     });
 
-    //------------------------------ teste Username duplicado --------------------------------//
-
+    // Verifica erro ao cadastrar username já existente
     test("With duplicated 'username'", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
         method: "POST",
