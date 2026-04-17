@@ -9,20 +9,12 @@ beforeAll(async () => {
 
 describe("GET /api/v1/users/[username]", () => {
   describe("Anonymous User", () => {
+    // Verifica se a busca retorna corretamente o usuário exatamente como foi cadastrado
     test("With exact case match", async () => {
-      const response1 = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "MesmoCase",
-          email: "mesmo.case@gmail.com",
-          password: "senha123",
-        }),
+      await orchestrator.createUser({
+        username: "MesmoCase",
+        email: "mesmo.case@gmail.com",
       });
-
-      expect(response1.status).toBe(201);
 
       const response2 = await fetch("http://localhost:3000/api/v1/users/MesmoCase");
 
@@ -43,20 +35,12 @@ describe("GET /api/v1/users/[username]", () => {
       expect(Date.parse(response2Body.updated_at)).not.toBeNaN();
     });
 
+    // Verifica se a busca do usuário funciona independentemente de letras maiúsculas ou minúsculas
     test("With case mismatch", async () => {
-      const response1 = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "CaseDiferente",
-          email: "case.diferente@gmail.com",
-          password: "senha123",
-        }),
+      await orchestrator.createUser({
+        username: "CaseDiferente",
+        email: "case.diferente@gmail.com",
       });
-
-      expect(response1.status).toBe(201);
 
       const response2 = await fetch("http://localhost:3000/api/v1/users/casediferente");
 
@@ -76,6 +60,8 @@ describe("GET /api/v1/users/[username]", () => {
       expect(Date.parse(response2Body.created_at)).not.toBeNaN();
       expect(Date.parse(response2Body.updated_at)).not.toBeNaN();
     });
+
+    // Verifica a busca de um usuário inexistente
     test("With nonexistent username", async () => {
       const response = await fetch("http://localhost:3000/api/v1/users/usuarioinexistente");
       expect(response.status).toBe(404);

@@ -9,6 +9,7 @@ beforeAll(async () => {
 describe("POST /api/v1/migrations", () => {
   describe("Anonymous User", () => {
     describe("Running pending migrations", () => {
+      // Testa sucesso ao executar migrações pela primeira vez
       test("For the first time", async () => {
         const response1 = await fetch("http://localhost:3000/api/v1/migrations", {
           method: "POST",
@@ -22,6 +23,8 @@ describe("POST /api/v1/migrations", () => {
         const numberMigrations1 = await database.query("SELECT COUNT(*)::int FROM pgmigrations ");
         expect(numberMigrations1.rows[0].count).toBeGreaterThanOrEqual(0);
       });
+
+      // Testa segunda execução das migrações sem novas pendências
       test("For the second time", async () => {
         const response2 = await fetch("http://localhost:3000/api/v1/migrations", {
           method: "POST",
