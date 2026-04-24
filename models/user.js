@@ -64,6 +64,36 @@ async function findOneByEmail(email) {
   }
 }
 
+async function findOneById(UserId) {
+  const userFound = await runSelectQuery(UserId);
+  return userFound;
+
+  async function runSelectQuery(UserId) {
+    const results = await database.query({
+      text: `
+          SELECT
+            *
+          FROM 
+            users
+          WHERE
+            id = $1
+          LIMIT
+           1
+          ;`,
+      values: [UserId],
+    });
+
+    if (results.rowCount === 0) {
+      throw new NotFoundError({
+        message: "O id informado não foi encontrado no sistema.",
+        action: "Verfifique se o id está digitado corretamente.",
+      });
+    }
+
+    return results.rows[0];
+  }
+}
+
 // --------------------------- função para CRIAR Usuário ---------------------------
 
 async function create(userInputValues) {
@@ -193,6 +223,7 @@ const user = {
   create,
   findOneByUsername,
   findOneByEmail,
+  findOneById,
   update,
 };
 
