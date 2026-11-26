@@ -48,6 +48,28 @@ describe("POST /api/v1/users", () => {
       expect(incorrectPasswordMatch).toBe(false);
     });
 
+    test("With password shorter than 8 characters", async () => {
+      const response = await fetch("http://localhost:3000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "shortpassworduser",
+          email: "shortpassword@example.com",
+          password: "1234567",
+        }),
+      });
+
+      expect(response.status).toBe(400);
+      expect(await response.json()).toEqual({
+        name: "ValidationError",
+        message: "A senha deve possuir pelo menos 8 caracteres.",
+        action: "Informe uma senha com no mínimo 8 caracteres.",
+        status_code: 400,
+      });
+    });
+
     // Verifica erro ao cadastrar email já existente
     test("With duplicated 'email'", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
