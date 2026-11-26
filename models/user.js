@@ -97,6 +97,7 @@ async function findOneById(UserId) {
 // --------------------------- função para CRIAR Usuário ---------------------------
 
 async function create(userInputValues) {
+  validatePassword(userInputValues.password);
   await validateUniqueUsername(userInputValues.username);
   await validateUniqueEmail(userInputValues.email);
   await hashPasswordInObject(userInputValues);
@@ -217,6 +218,15 @@ async function validateUniqueEmail(email) {
 async function hashPasswordInObject(userInputValues) {
   const hashedPassword = await password.hash(userInputValues.password);
   userInputValues.password = hashedPassword;
+}
+
+function validatePassword(password) {
+  if (typeof password !== "string" || password.length < 8) {
+    throw new ValidationError({
+      message: "A senha deve possuir pelo menos 8 caracteres.",
+      action: "Informe uma senha com no mínimo 8 caracteres.",
+    });
+  }
 }
 
 const user = {
